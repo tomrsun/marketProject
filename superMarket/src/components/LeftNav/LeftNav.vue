@@ -58,6 +58,42 @@
                 <el-menu-item index="/home/stocktotal">进货统计</el-menu-item>
             </el-submenu>
 
+            <!-- 进货管理 -->
+            <el-submenu index="5">
+                <!-- 图标和标题 -->
+                <template slot="title">
+                    <i class="el-icon-edit-outline"></i>
+                    <span>进货管理</span>
+                </template>
+                <!-- 二级导航 -->
+                <el-menu-item index="/home/stockmanage">库存管理</el-menu-item>
+                <el-menu-item index="/home/stockadd">添加库存</el-menu-item>
+            </el-submenu>
+
+             <!-- 出货管理 -->
+            <el-submenu index="6">
+                <!-- 图标和标题 -->
+                <template slot="title">
+                    <i class="el-icon-edit-outline"></i>
+                    <span>出货管理</span>
+                </template>
+                <!-- 二级导航 -->
+                <el-menu-item index="/home/shipmentlist">销售列表</el-menu-item>
+                <el-menu-item index="/home/commodityship">商品出货</el-menu-item>
+                <el-menu-item index="/home/commodityreject">商品退货</el-menu-item>
+            </el-submenu>
+
+            <!-- 会员管理 -->
+            <el-submenu index="7">
+                <!-- 图标和标题 -->
+                <template slot="title">
+                    <i class="el-icon-edit-outline"></i>
+                    <span>会员管理</span>
+                </template>
+                <!-- 二级导航 -->
+                <el-menu-item index="/home/membermanage">账号管理</el-menu-item>
+                <el-menu-item index="/home/memberadd">添加账号</el-menu-item>
+            </el-submenu>
         </el-menu>
     </div>
 </template>

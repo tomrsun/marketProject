@@ -60,6 +60,41 @@ export default new Router({
           {
             path: '/home/stocktotal',
             component: () => import('./views/StockTotal/StockTotal.vue'),
+          },
+           // 进货管理
+           {
+            path: '/home/stockmanage',
+            component: () => import('./views/StockManage/StockManage.vue'),
+          },
+           // 添加库存
+           {
+            path: '/home/stockadd',
+            component: () => import('./views/StockAdd/StockAdd.vue'),
+          },
+           // 销售列表
+           {
+            path: '/home/shipmentlist',
+            component: () => import('./views/ShipmentList/ShipmentList.vue'),
+          },
+           // 商品出库
+           {
+            path: '/home/commodityship',
+            component: () => import('./views/ComodityShip/ComodityShip.vue'),
+          },
+           // 商品退货
+           {
+            path: '/home/commodityreject',
+            component: () => import('./views/ComodityReject/ComodityReject.vue'),
+          },
+           // 添加会员账号
+           {
+            path: '/home/memberadd',
+            component: () => import('./views/MemberAdd/MemberAdd.vue'),
+          },
+           // 会员账号管理
+           {
+            path: '/home/membermanage',
+            component: () => import('./views/MemberManage/MemberManage.vue'),
           }
       ]
   }

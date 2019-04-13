@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-manage">
+  <div class="stock-manage">
     <!-- 面板 -->
     <el-card class="box-card">
       <!-- 头部 -->
@@ -34,27 +34,19 @@
 
           <!-- 商品名称 -->
           <el-table-column prop="goodname" label="商品名称"></el-table-column>
-          
-          <!-- 所属分类 -->
-          <el-table-column prop="classification" label="所属分类"></el-table-column>
 
-          <!-- 售价-->
-          <el-table-column prop="salePrice" label="售价(元)"></el-table-column>
+          <!-- 进价-->
+          <el-table-column prop="purchasePrice" label="进价(元)"></el-table-column>
 
-          <!-- 促销价 -->
-          <el-table-column prop="disCountPrice" label="促销价(元)"></el-table-column>
-
-          <!-- 市场价 -->
-          <el-table-column prop="marketPrice" label="市场价(元)"></el-table-column>
+          <!-- 入库 -->
+          <el-table-column prop="inventoryQuantity" label="入库"></el-table-column>
 
           <!-- 库存 -->
           <el-table-column prop="stockNumber" label="库存"></el-table-column>
 
-          <!-- 库存总额 -->
-          <el-table-column prop="stockTotalPrice" label="库存总额(元)"></el-table-column>
+          <!-- 已售 -->
+          <el-table-column prop="alreadySale" label="已售"></el-table-column>
 
-          <!-- 销售总额 -->
-          <el-table-column prop="saleTotalPrice" label="销售总额(元)"></el-table-column>
           <!-- 操作 -->
           <el-table-column label="管理">
               <template slot-scope="scope">
@@ -97,13 +89,10 @@ export default {
       goodsTableData: [{
           goodBarCode:"a",//条形码
           goodname:"b",//商品名称
-          classification:"c",//所属分类
-          salePrice:"d",//售价
-          disCountPrice:"f",//促销价
-          marketPrice:"g",//市场价
-          stockNumber:"t",//库存
-          stockTotalPrice:"u",//库存总额
-          saleTotalPrice:"t"//销售总额
+          purchasePrice:"d",//进价
+          inventoryQuantity:"c",//入库
+          stockNumber:"他",//库存
+          alreadySale:"q"//已售
       }],
       currentPage: 1,  // 当前页
       total: 11,
@@ -137,6 +126,6 @@ export default {
 };
 </script>
 <style lang="less">
-     @import "./goodsmanage.less";
+     @import "./stockmanage.less";
 </style>
 

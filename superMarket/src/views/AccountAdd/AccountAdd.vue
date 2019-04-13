@@ -112,7 +112,7 @@ export default {
                             password: this.accountForm.password,
                             userGroup:this.accountForm.userGroup
                         } 
-                        // console.log(this.request);
+                       
                         this.request.post('/account/accountadd',params)
                                     .then(res => {
                                        console.log(res);

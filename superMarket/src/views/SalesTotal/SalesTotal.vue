@@ -87,7 +87,7 @@ export default {
         }],
         value: '选项1',
         value1: '',
-        value2: '',
+        value2: ''
       };
     }
 }
