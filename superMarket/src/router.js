@@ -95,7 +95,12 @@ export default new Router({
            {
             path: '/home/membermanage',
             component: () => import('./views/MemberManage/MemberManage.vue'),
-          }
+          },
+          // 个人中心
+          {
+            path: '/home/personal',
+            component: () => import('./views/Personal/Personal.vue'),
+          },
       ]
   }
   ]

@@ -6,20 +6,25 @@
       <div slot="header" class="clearfix">
         <span>商品管理</span>
       </div>
-       <el-form :inline="true" :model="formInline" class="demo-form-inline" size="small">
+       <el-form :inline="true" :model="searchForm" class="demo-form-inline" size="small">
          
           <el-form-item>
-            <el-select v-model="formInline.region" placeholder="选择分类">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+            <el-select v-model="searchForm.cateName" placeholder="选择分类">
+              <el-option label="全部" value="全部"></el-option>
+              <el-option label="百货" value="百货"></el-option>
+              <el-option label="食品" value="食品"></el-option>
+              <el-option label="手机数码" value="手机数码"></el-option>
+              <el-option label="女装" value="女装"></el-option>
+              <el-option label="男装" value="男装"></el-option>
+              <el-option label="家电" value="家电"></el-option>
             </el-select>
           </el-form-item>
            <el-form-item label="关键字：">
-            <el-input v-model="formInline.user" placeholder=""></el-input>
+            <el-input v-model="searchForm.keyword" placeholder=""></el-input>
           </el-form-item>
           <span class="tip">(商品名称,条形码)</span>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
+            <el-button type="primary" @click="searchSubmit">查询</el-button>
           </el-form-item>
         </el-form>
                
@@ -77,7 +82,7 @@
             @current-change="handleCurrentChange"
             :current-page="currentPage"
             :page-sizes="[1, 3, 5, 10, 20, 50]"
-            :page-size="3"
+            :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total">
           </el-pagination>`
@@ -94,27 +99,55 @@ export default {
   data() {
     return {
       // 账号表格数据   
-      goodsTableData: [{
-          goodBarCode:"a",//条形码
-          goodname:"b",//商品名称
-          classification:"c",//所属分类
-          salePrice:"d",//售价
-          disCountPrice:"f",//促销价
-          marketPrice:"g",//市场价
-          stockNumber:"t",//库存
-          stockTotalPrice:"u",//库存总额
-          saleTotalPrice:"t"//销售总额
-      }],
-      currentPage: 1,  // 当前页
-      total: 11,
+      goodsTableData: [],
+      currentPage: 1, 
+      pageSize:3, // 当前页
+      total: 1,
       formInline: {
           user: '',
           region: ''
-        }
+        },
+      searchForm: { // 搜索表格数据
+        cateName: '',
+        keyword: ''
+      }
+      
       
     };
   },
   methods: {
+     //获取当前页数据
+    gitCurrentData(){
+      // 收集参数
+      let params = {
+          currentPage: this.currentPage, 
+          pageSize: this.pageSize,
+          cateName: this.searchForm.cateName,
+          keyword: this.searchForm.keyword
+      }
+     
+       // 发送axios 请求数据
+        this.request.get('/goods/goodslist',params)
+          .then(res => {
+            
+            let { total, data} =res
+            this.goodsTableData = [];
+            for(let i=0;i<data.length;i++){
+               let { classification,goodBarCode,goodname,salePrice,marketPrice,inventoryQuantity } = data[i];
+              let disCountPrice = Math.floor(salePrice*0.8) ;
+              
+              let stockTotalPrice = marketPrice*inventoryQuantity;
+              let saleTotalPrice = disCountPrice*inventoryQuantity;
+              let stockNumber = inventoryQuantity;
+               this.goodsTableData.push({ classification,goodBarCode,goodname,salePrice,marketPrice,stockNumber,disCountPrice,stockTotalPrice,saleTotalPrice });
+            }
+            this.total = total;
+          })
+          .catch(err => {
+            console.log(err)
+          })
+
+    },
     // 修改
     handleEdit() {
         console.log('修改吗？')
@@ -123,15 +156,21 @@ export default {
     handleDelete() {
         console.log('删除吗？')
     },
-    handleSizeChange() {
+    handleSizeChange(val) {
+        this.pageSize = val;
+        this.gitCurrentData();
 
     },
-    handleCurrentChange() {
-
+    handleCurrentChange(val) {
+        this.currentPage = val;
+        this.gitCurrentData();
     },
-    onSubmit() {
-        console.log('submit!');
+    searchSubmit() {
+        this.gitCurrentData();
       }
+  },
+   created () {
+   this.gitCurrentData();
   }
  
 };

@@ -11,12 +11,12 @@
             <el-container>
                 <!-- 头 -->
                 <el-header>
-                    <Header></Header>
+                    <Header ref="header"></Header>
                 </el-header>
                 <!-- 中 -->
                 <el-main>
                     <!-- 路由出口 -->
-                    <router-view></router-view>
+                    <router-view @A="B"></router-view>
                 </el-main>
                 <!-- 尾 -->
                 <el-footer>
@@ -41,6 +41,11 @@ export default {
         LeftNav,
         Header,
         Footer
+    },
+     methods: {
+        B() {
+            this.$refs.header.getCurrentAccount()
+        }
     }
 }
 </script>

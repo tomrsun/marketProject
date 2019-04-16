@@ -115,7 +115,20 @@ export default {
                        
                         this.request.post('/account/accountadd',params)
                                     .then(res => {
-                                       console.log(res);
+                                       let {code, reason} = res;
+                                        // 判断
+                                        if (code === 0) {
+                                            // 弹成功提示
+                                            this.$message({
+                                                type: 'success',
+                                                message: reason
+                                            })
+                                            // 跳账号列表
+                                            this.$router.push('/home/accountmanage')
+                                        } else if (code === 1) {
+                                            // 弹失败提示
+                                            this.$message.error(reason)
+                                        }
                                     })
                                     .catch(err => {
                                         console.log(err);

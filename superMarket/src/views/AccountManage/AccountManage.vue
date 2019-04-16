@@ -132,7 +132,7 @@ export default {
         currentPage: this.currentPage,
         pageSize: this.pageSize
       }
-      console.log(params);
+    
        // 发送axios 请求所有账号数据
         this.request.get('/account/accountlist',params)
           .then(res => {
@@ -165,6 +165,7 @@ export default {
         this.request.get('/account/editaccount',{ id })
                     .then((res) => {
                       //解构
+                      
                       let { account, user_group } = res[0];
                       this.editForm.account = account,
                       this.editForm.userGroup = user_group

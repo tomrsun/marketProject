@@ -15,8 +15,12 @@
                 >
                  <el-form-item label="所属分类" prop="classification">
                     <el-select v-model="goodsAddForm.classification" placeholder="选择分类">
-                    <el-option label="牛奶" value="牛奶"></el-option>
-                    <el-option label="粮油" value="粮油"></el-option>
+                    <el-option label="百货" value="百货"></el-option>
+                    <el-option label="食品" value="食品"></el-option>
+                    <el-option label="手机数码" value="手机数码"></el-option>
+                    <el-option label="女装" value="女装"></el-option>
+                    <el-option label="男装" value="男装"></el-option>
+                    <el-option label="家电" value="家电"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商品条形码" prop="goodBarCode">
@@ -98,32 +102,32 @@ export default {
                 ],
                 goodname:[
                     { required:true, message:'请填写商品名称', trigger:'blur'},
-                    { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
+                    { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'blur' }
                 ],
                 salePrice:[
                     { required:true, message:'请填写商品售价', trigger:'blur'},
-                    { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
+                    { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'blur' }
                 ],
                 marketPrice:[
                     { required:true, message:'请填写市场价', trigger:'blur'},
-                    { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
+                    { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'blur' }
                 ],
                 purchasePrice:[
                     { required:true, message:'请填写进价', trigger:'blur'},
-                    { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
+                    { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'blur' }
                 ],
                
                 inventoryQuantity:[
                     { required:true, message:'请填写数量', trigger:'blur'},
-                    { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
+                    { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'blur' }
                 ],
                 goodWeight:[
                     { required:true, message:'请填写重量', trigger:'blur'},
-                    { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
+                    { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'blur' }
                 ],
                 goodUnit:[
                     { required:true, message:'请填写单位', trigger:'blur'},
-                    { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
+                    { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'blur' }
                 ],
                 memberDiscount:[
                     { required:true, message:'请选择会员优惠', trigger:'change'},
@@ -147,6 +151,7 @@ export default {
                     if(valid){
                         let params = {
                             classification:this.goodsAddForm.classification,
+                            goodBarCode:this.goodsAddForm.goodBarCode,
                             goodname:this.goodsAddForm.goodname,
                             salePrice:this.goodsAddForm.salePrice,
                             marketPrice:this.goodsAddForm.marketPrice,
@@ -158,10 +163,33 @@ export default {
                             promotion:this.goodsAddForm.promotion,
                             description:this.goodsAddForm.description
                         } 
-                        alert('商品添加成功');
-                        this.$router.push('/home/goodsmanage')
+                        
+                        this.request.post('/goods/goodsadd',params)
+                                    .then(res => {
+                                       let {code, reason} = res;
+                                        // 判断
+                                        if (code === 0) {
+                                            // 弹成功提示
+                                            this.$message({
+                                                type: 'success',
+                                                message: reason
+                                            })
+                                            // 跳账号列表
+                                            this.$router.push('/home/goodsmanage')
+                                        } else if (code === 1) {
+                                            // 弹失败提示
+                                            this.$message.error(reason)
+                                        }
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                    })
+
+                        // this.$router.push('/home/accountmanage')
                     }else{
-                        alert('添加失败')
+                        console.log('添加失败');
+                        return
+
                     }
             })
         },

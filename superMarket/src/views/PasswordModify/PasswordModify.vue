@@ -41,10 +41,29 @@
 // 引入正则验证
 import { passwordReg } from '@/utils/validator';
 
-
+import local from '@/utils/local'
 export default {
     
   data() {
+      // 自定义验证旧密码
+        const validatorOldPassword = (rule, value, callback) => {
+            // 发送axios给后端
+            this.request.post('/account/passwordmodify', { oldPassword: value })
+                .then(res => {
+                    // 接收后端响应的数据
+                    let {code, reason} = res;
+                   
+                    // 判断
+                    if (code === 0) {
+                        callback() // 成功
+                    } else {
+                        callback(new Error(reason)) // 失败
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
        //密码的自定义验证函数
         const checkPassword=(rule, value, callback) =>{
             if(value === ''){
@@ -78,7 +97,7 @@ export default {
           },
           rules:{
               oldPassword:[
-                   { required: true, message:'请输入原密码', trigger:'blur' },//非空验证
+                   { required: true, validator: validatorOldPassword, trigger:'blur' },//非空验证
               ],
               newPassword:[
                     { required: true, validator:checkPassword, trigger:'blur'}
@@ -92,20 +111,49 @@ export default {
    methods:{
         //添加
         submitForm(){
+            
             this.$refs.passwordModifyForm.validate(valid =>{
+                
                     //接收数据
-                    if(valid){
-                       console.log('修改成功');
-                    }else{
-                        console.log('修改失败');
-                        return
-
+                    if (valid) {
+                    // 收集新密码
+                    let params = {
+                        newPassword: this.passwordModifyForm.newPassword
                     }
+                    // 发送请求给后端
+                    this.request.post('/account/savenewpassword', params)
+                        .then(res => {
+                            // 接收数据
+                            let {code, reason} = res;
+                            // 判断
+                            if (code === 0) {
+                                // 弹成功提示 
+                                this.$message({
+                                    type: 'success',
+                                    message: reason
+                                })   
+                                
+                                // 删除token
+                                local.remove('x_h_l_x_d_c666')
+
+                                // 跳转到登录页面
+                                this.$router.push('/login')
+                                
+                            } else if (code === 1) {
+                                this.$message.error(reason)
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                } else {
+                    return
+                }
             })
         },
         // 重置
         resetForm(){
-            this.$refs.accountForm.resetFields();
+            this.$refs.passwordModifyForm.resetFields();
         }
     }
 }

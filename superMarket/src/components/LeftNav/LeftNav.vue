@@ -10,96 +10,49 @@
             unique-opened
             router
             >
-            <!-- 系统管理 -->
-            <el-submenu index="1">
+             <!-- 导航 -->
+            <el-submenu :index="(index + 1) + ''" v-for="(menu, index) in menus" :key="index">
                 <!-- 图标和标题 -->
                 <template slot="title">
-                    <i class="el-icon-document"></i>
-                    <span>系统管理</span>
+                    <i :class="menu.iconClass"></i>
+                    <span>{{ menu.title }}</span>
                 </template>
                 <!-- 二级导航 -->
-                <el-menu-item index="/home/systeminfo">系统信息</el-menu-item>
-            </el-submenu>
-
-            <!-- 账号管理 -->
-            <el-submenu index="2">
-                <!-- 图标和标题 -->
-                <template slot="title">
-                    <i class="el-icon-news"></i>
-                    <span>账号管理</span>
-                </template>
-                <!-- 二级导航 -->
-                <el-menu-item index="/home/accountmanage">账号管理</el-menu-item>
-                <el-menu-item index="/home/accountadd">添加账号</el-menu-item>
-                <el-menu-item index="/home/passwordmodify">密码修改</el-menu-item>
-            </el-submenu>
-
-            <!-- 商品管理 -->
-            <el-submenu index="3">
-                <!-- 图标和标题 -->
-                <template slot="title">
-                    <i class="el-icon-goods"></i>
-                    <span>商品管理</span>
-                </template>
-                <!-- 二级导航 -->
-                <el-menu-item index="/home/goodsmanage">商品管理</el-menu-item>
-                <el-menu-item index="/home/goodsadd">添加商品</el-menu-item>
-            </el-submenu>
-
-            <!-- 统计管理 -->
-            <el-submenu index="4">
-                <!-- 图标和标题 -->
-                <template slot="title">
-                    <i class="el-icon-edit-outline"></i>
-                    <span>统计管理</span>
-                </template>
-                <!-- 二级导航 -->
-                <el-menu-item index="/home/salestotal">销售统计</el-menu-item>
-                <el-menu-item index="/home/stocktotal">进货统计</el-menu-item>
-            </el-submenu>
-
-            <!-- 进货管理 -->
-            <el-submenu index="5">
-                <!-- 图标和标题 -->
-                <template slot="title">
-                    <i class="el-icon-edit-outline"></i>
-                    <span>进货管理</span>
-                </template>
-                <!-- 二级导航 -->
-                <el-menu-item index="/home/stockmanage">库存管理</el-menu-item>
-                <el-menu-item index="/home/stockadd">添加库存</el-menu-item>
-            </el-submenu>
-
-             <!-- 出货管理 -->
-            <el-submenu index="6">
-                <!-- 图标和标题 -->
-                <template slot="title">
-                    <i class="el-icon-edit-outline"></i>
-                    <span>出货管理</span>
-                </template>
-                <!-- 二级导航 -->
-                <el-menu-item index="/home/shipmentlist">销售列表</el-menu-item>
-                <el-menu-item index="/home/commodityship">商品出货</el-menu-item>
-                <el-menu-item index="/home/commodityreject">商品退货</el-menu-item>
-            </el-submenu>
-
-            <!-- 会员管理 -->
-            <el-submenu index="7">
-                <!-- 图标和标题 -->
-                <template slot="title">
-                    <i class="el-icon-edit-outline"></i>
-                    <span>会员管理</span>
-                </template>
-                <!-- 二级导航 -->
-                <el-menu-item index="/home/membermanage">账号管理</el-menu-item>
-                <el-menu-item index="/home/memberadd">添加账号</el-menu-item>
+                <el-menu-item 
+                    v-for="(subMenu, index) in menu.children"
+                    :index="subMenu.path"
+                    :key="index"
+                    >
+                    {{ subMenu.subTitle }}
+                </el-menu-item>
             </el-submenu>
         </el-menu>
     </div>
 </template>
 <script>
 export default {
-    
+     data () {
+        return {
+            // 导航菜单数据
+            menus: []
+        }
+    },
+    methods: {
+        getMenus() {
+            this.request.get('/login/menus')
+             .then(res => {
+                // 接收后端响应的菜单
+                this.menus = res.accessMenu;
+             })
+             .catch(err => {
+                 console.log(err)
+             })
+        }
+    },
+    created() {
+        // 调用请求 请求菜单数据
+        this.getMenus();
+    }
 }
 </script>
 <style lang="less">
